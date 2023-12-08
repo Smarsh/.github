@@ -1,0 +1,38 @@
+name: "Jira Lint"
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  parse_commit_for_jira_id:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: cleartax/jira-lint@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          jira-token: ${{ secrets.JIRA_API_TOKEN }}
+          jira-base-url: https://smarsh.atlassian.net
+          skip-branches: '^(master\/v\d+)$'
+          pr-threshold: 1000
+      - name: Parse Jira Keys from Commit
+        id: jira_keys
+        if: always()
+        uses: HighwayThree/jira-extract-issue-keys@master
+        with:
+          is-pull-request: ${{ github.event_name == 'pull_request' }}
+          parse-all-commits: ${{ github.event_name == 'push' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Fail if no Jira Story ID found in commit message
+        if: steps.jira_keys.outputs.jira-keys == ''
+        shell: bash
+        run: |
+          echo "All commit messages must include a Jira Story ID"
+          echo "::set-env name=BUILD_STATE::failed"
+          exit 1
+      - name: Echo Jira Story ID
+        if: steps.jira_keys.outputs.jira-keys != ''
+        shell: bash
+        run: echo ${{steps.jira_keys.outputs.jira-keys}}
