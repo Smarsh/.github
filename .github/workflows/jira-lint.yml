@@ -9,16 +9,14 @@ jobs:
   parse_commit_for_jira_id:
     runs-on: ubuntu-latest
     steps:
-      - uses: cleartax/jira-lint@master
-        name: Jira Lint
+      - name: Jira Lint
+        uses: cleartax/jira-lint@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           jira-token: ${{ secrets.JIRA_API_TOKEN }}
           jira-base-url: https://smarsh.atlassian.net
           skip-branches: '^(main\/v\d+)$'
           pr-threshold: 1000
-          validate_issue_status: true
-          allowed_issue_statuses: "Development", "Development Complete", "Technical Review"
       - name: Parse Jira Keys from Commit
         id: jira_keys
         if: always()
