@@ -17,6 +17,8 @@ jobs:
           jira-base-url: https://smarsh.atlassian.net
           skip-branches: '^(main\/v\d+)$'
           pr-threshold: 1000
+          validate_issue_status: true
+          allowed_issue_statuses: ["Development", "Development Complete", "Technical Review"]
       - name: Parse Jira Keys from Commit
         id: jira_keys
         if: always()
