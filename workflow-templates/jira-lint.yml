@@ -3,7 +3,7 @@ name: "Jira Lint"
 on:
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   parse_commit_for_jira_id:
