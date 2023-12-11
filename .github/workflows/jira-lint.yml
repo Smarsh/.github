@@ -1,24 +1,24 @@
 name: Jira Lint
 
-on:
-  pull_request:
-    branches:
-      - main
+on: [pull_request]
 
 jobs:
   parse_commit_for_jira_id:
     runs-on: ubuntu-latest
     steps:
       - name: Jira Lint
-        uses: cleartax/jira-lint@master
+        uses: btwrk/action-jira-linter@v1.0.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           jira-token: ${{ secrets.JIRA_API_TOKEN }}
           jira-base-url: https://smarsh.atlassian.net
           skip-branches: '^(main\/v\d+)$'
           pr-threshold: 1000
-          validate_issue_status: true
-          allowed_issue_statuses: "Development Complete"
+          validate-issue-status: true
+          allowed-issue-statuses: |
+            Development Complete
+            Development
+            In Technical Review
       - name: Parse Jira Keys from Commit
         id: jira_keys
         if: always()
