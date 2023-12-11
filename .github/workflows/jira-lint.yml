@@ -9,7 +9,8 @@ jobs:
   parse_commit_for_jira_id:
     runs-on: ubuntu-latest
     steps:
-      - uses: cleartax/jira-lint@master
+      - name: Jira Lint
+        uses: cleartax/jira-lint@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           jira-token: ${{ secrets.JIRA_API_TOKEN }}
