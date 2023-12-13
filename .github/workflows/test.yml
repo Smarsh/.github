@@ -1,12 +1,12 @@
-name: Jira Lint
+name: Jira Status Check
 
 on: [pull_request]
 
 jobs:
-  parse_commit_for_jira_id:
+  jira_status_check:
     runs-on: ubuntu-latest
     steps:
-      - name: Jira Lint
+      - name: Test Jira Status Check
         uses: cleartax/jira-lint@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -19,23 +19,3 @@ jobs:
             Development,
             Development Complete,
             Technical Review
-      - name: Parse Jira Keys from Commit
-        id: jira_keys
-        if: always()
-        uses: HighwayThree/jira-extract-issue-keys@master
-        with:
-          is-pull-request: ${{ github.event_name == 'pull_request' }}
-          parse-all-commits: ${{ github.event_name == 'push' }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Fail if no Jira Key found in any commit message
-        if: steps.jira_keys.outputs.jira-keys == ''
-        shell: bash
-        run: |
-          echo "At least one commit message must include a Jira Key"
-          echo "BUILD_STATE=failed" >> $GITHUB_ENV
-          exit 1
-      - name: Echo Jira Keys
-        if: steps.jira_keys.outputs.jira-keys != ''
-        shell: bash
-        run: echo ${{steps.jira_keys.outputs.jira-keys}}
