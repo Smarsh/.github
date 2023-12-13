@@ -14,6 +14,7 @@ jobs:
           jira-base-url: https://smarsh.atlassian.net
           skip-branches: '^(main\/v\d+)$'
           pr-threshold: 1000
+          skip-comments: true
           validate_issue_status: true
           allowed_issue_statuses: >-
             Development,
