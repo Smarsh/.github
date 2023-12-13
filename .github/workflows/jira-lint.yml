@@ -23,14 +23,14 @@ jobs:
           parse-all-commits: ${{ github.event_name == 'push' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Fail if no Jira Story ID found in commit message
+      - name: Fail if no Jira Key found in any commit message
         if: steps.jira_keys.outputs.jira-keys == ''
         shell: bash
         run: |
-          echo "All commit messages must include a Jira Story ID"
-          echo "::set-env name=BUILD_STATE::failed"
+          echo "At least one commit message must include a Jira Key"
+          echo "BUILD_STATE=failed" >> $GITHUB_ENV
           exit 1
-      - name: Echo Jira Story ID
+      - name: Echo Jira Keys
         if: steps.jira_keys.outputs.jira-keys != ''
         shell: bash
         run: echo ${{steps.jira_keys.outputs.jira-keys}}
