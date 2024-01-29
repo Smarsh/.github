@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Test Jira Status Check
-        uses: cleartax/jira-lint@master
+        uses: smarsh/jira-lint@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           jira-token: ${{ secrets.JIRA_API_TOKEN }}
@@ -15,8 +15,14 @@ jobs:
           skip-branches: '^(main\/v\d+)$'
           pr-threshold: 1000
           skip-comments: true
-          validate_issue_status: true
-          allowed_issue_statuses: >-
-            Development,
-            Development Complete,
+          validate-issue-status: true
+          allowed-issue-statuses: |
+            Accepted
+            To Do
+            In Progress
+            Work in progress
+            Done
+            Development
+            Development Complete
             Technical Review
+          fail-on-error: true
