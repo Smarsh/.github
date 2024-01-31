@@ -1,23 +1,35 @@
-name: "Jira Lint"
+---
+name: Jira Lint and Status Check
 
-on:
-  pull_request:
-    branches:
-      - main
+on: [pull_request]
 
 jobs:
-  parse_commit_for_jira_id:
+  jira_status_check:
     runs-on: ubuntu-latest
     steps:
-      - uses: cleartax/jira-lint@master
+      - name: Test Jira Status Check
+        uses: smarsh/jira-lint@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           jira-token: ${{ secrets.JIRA_API_TOKEN }}
           jira-base-url: https://smarsh.atlassian.net
           skip-branches: '^(main\/v\d+)$'
           pr-threshold: 1000
-          validate_issue_status: true
-          allowed_issue_statuses: "Development", "Development Complete", "Technical Review"
+          skip-comments: true
+          validate-issue-status: true
+          allowed-issue-statuses: |
+            Accepted
+            To Do
+            In Progress
+            Work in progress
+            Done
+            Development
+            Development Complete
+            Technical Review
+          fail-on-error: true
+  parse_commits_for_jira_ids:
+    runs-on: ubuntu-latest
+    steps:
       - name: Parse Jira Keys from Commit
         id: jira_keys
         if: always()
@@ -27,14 +39,14 @@ jobs:
           parse-all-commits: ${{ github.event_name == 'push' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Fail if no Jira Story ID found in commit message
+      - name: Fail if no Jira Key found in any commit message
         if: steps.jira_keys.outputs.jira-keys == ''
         shell: bash
         run: |
-          echo "All commit messages must include a Jira Story ID"
-          echo "::set-env name=BUILD_STATE::failed"
+          echo "At least one commit message must include a Jira Key"
+          echo "BUILD_STATE=failed" >> $GITHUB_ENV
           exit 1
-      - name: Echo Jira Story ID
+      - name: Echo Jira Keys
         if: steps.jira_keys.outputs.jira-keys != ''
         shell: bash
         run: echo ${{steps.jira_keys.outputs.jira-keys}}
