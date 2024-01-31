@@ -55,7 +55,7 @@ repos:
     rev: v3.0.3
     hooks:
       - id: prettier
-        exclude: tsconfig.json|.git/|helm
+        exclude: tsconfig.json|.git/|helm|README.md
   - repo: https://github.com/adrienverge/yamllint
     rev: v1.32.0
     hooks:

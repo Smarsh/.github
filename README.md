@@ -34,30 +34,31 @@ Pre-commit hooks are added to the file [.pre-commit-config.yaml]. This uses the 
 
 3. Create baseline secrets file
 
-Create a baseline of potential secrets currently found in your git repository.
+  Create a baseline of potential secrets currently found in your git repository.
 
-```bash
-$ detect-secrets scan > .secrets.baseline
-```
+  ```bash
+  $ detect-secrets scan > .secrets.baseline
+  ```
 
-Note: This is only needed if installing in a different repository. Files already exist here.
+  Note: This is only needed if installing in a different repository. Files already exist here.
 
 4. Install the git hook scripts
 
-Run pre-commit install to set up the git hook scripts
+  Run pre-commit install to set up the git hook scripts
 
-```bash
-$ pre-commit install --hook-type prepare-commit-msg --hook-type pre-commit
-```
+  ```bash
+  $ pre-commit install --hook-type prepare-commit-msg --hook-type pre-commit
+  ```
 
-Now pre-commit will run automatically on git commit!
+  Now pre-commit will run automatically on git commit!
 
 5. (optional) Run against all the files
-   it's usually a good idea to run the hooks against all of the files when adding new hooks (usually pre-commit will only run on the changed files during git hooks)
 
-   ```bash
-   $ pre-commit run --all-files
-   ```
+  It's usually a good idea to run the hooks against all of the files when adding new hooks (usually pre-commit will only run on the changed files during git hooks)
+
+  ```bash
+  $ pre-commit run --all-files
+  ```
 
 ### Skipping Validation
 
