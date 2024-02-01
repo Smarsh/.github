@@ -16,16 +16,18 @@ jobs:
           skip-branches: '^(main\/v\d+)$'
           pr-threshold: 1000
           skip-comments: true
-          validate-issue-status: true
-          allowed-issue-statuses: |
-            Accepted
-            To Do
+          validate-issue-status: false
+          # allowed-issue-statuses: |
+          #   Accepted
+          #   To Do
+          #   In Progress
+          #   Work in progress
+          #   Done
+          #   Development
+          #   Development Complete
+          #   Technical Review
+          allowed-issue-status-categories: |
             In Progress
-            Work in progress
-            Done
-            Development
-            Development Complete
-            Technical Review
           fail-on-error: true
   parse_commits_for_jira_ids:
     runs-on: ubuntu-latest
